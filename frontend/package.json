@@ -1,5 +1,5 @@
 {
-  "name": "fontend",
+  "name": "killoj-fontend",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -27,7 +27,8 @@
     "less-loader": "^4.0.6",
     "lint-staged": "^8.1.0",
     "vue-cli-plugin-iview": "^1.0.6",
-    "vue-template-compiler": "^2.5.21"
+    "vue-template-compiler": "^2.5.21",
+    "cryptiles": "^4.1.2"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
