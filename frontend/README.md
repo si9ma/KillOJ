@@ -1,4 +1,8 @@
-# fontend
+# KillOJ Fontend
+
+The front-end project is based on vue.
+
+contributors: [@Jannchie](https://github.com/Jannchie)
 
 ## Project setup
 ```
