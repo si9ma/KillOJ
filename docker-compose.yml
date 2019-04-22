@@ -65,3 +65,5 @@ services:
 
 networks:
     net:
+      driver: overlay
+      attachable: true
