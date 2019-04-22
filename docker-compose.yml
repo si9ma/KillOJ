@@ -1,0 +1,67 @@
+version: "3.3"
+services:
+  rabbitmq:
+    image: si9ma/rabbitmq:3.6.11-management-alpine
+    hostname: "{{.Service.Name}}.{{.Task.Slot}}.{{.Task.ID}}"
+    build:
+        context: docker-library/rabbitmq
+    networks:
+        - net
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+      update_config:
+        parallelism: 1
+        delay: 10s
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=abc
+      - RABBITMQ_USE_LONGNAME=true
+      - RABBITMQ_MNESIA_DIR=/var/lib/rabbitmq/mnesia
+      - RABBITMQ_PLUGINS_EXPAND_DIR=/var/lib/rabbitmq/mnesia/plugins-expand
+      - SERVICE_NAME={{.Service.Name}}
+      - SLOT={{.Task.Slot}}
+      - MASTER_SLOT=1
+      - RABBITMQ_DEFAULT_USER=si9ma
+      - RABBITMQ_DEFAULT_PASS=rabbitmq
+    ports:
+      - "5672:5672"   # amqp
+      - "15672:15672" # web ui
+
+  redis:
+      image: si9ma/redis:5.0.4-alpine
+      hostname: "{{.Service.Name}}.{{.Task.Slot}}.{{.Task.ID}}"
+      build:
+        context: docker-library/redis
+      environment:
+        - CLUSTERED=true
+        - CLUSTER_NODES=6 # this value must equal to replicas
+        - CLUSTER_SETUPER_SLOT=1 # the first slot task to setup cluster
+        - SERVICE_NAME={{.Service.Name}}
+        - SLOT={{.Task.Slot}}
+      networks:
+          - net
+      deploy:
+        replicas: 6
+        update_config:
+          parallelism: 2
+          delay: 10s
+        restart_policy:
+          condition: on-failure
+      ports:
+        - "6379:6379"
+
+  jaeger:
+      image: jaegertracing/all-in-one:1.11
+      hostname: "{{.Service.Name}}.{{.Task.Slot}}.{{.Task.ID}}"
+      networks:
+          - net
+      deploy:
+        placement:
+          constraints: [node.role == manager]
+      ports:
+        - "6831:6831"
+        - "16686:16686"
+
+networks:
+    net:
