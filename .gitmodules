@@ -1,0 +1,3 @@
+[submodule "docker-library"]
+	path = docker-library
+	url = git@github.com:si9ma/docker-library.git
