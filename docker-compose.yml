@@ -54,14 +54,74 @@ services:
   jaeger:
       image: jaegertracing/all-in-one:1.11
       hostname: "{{.Service.Name}}.{{.Task.Slot}}.{{.Task.ID}}"
+      restart: always
       networks:
           - net
+      environment:
+        - SPAN_STORAGE_TYPE=elasticsearch
+        - ES_SERVER_URLS=http://elasticsearch:9200
       deploy:
         placement:
           constraints: [node.role == manager]
       ports:
-        - "6831:6831"
+        - "5775:5775/udp"
+        - "6831:6831/udp"
+        - "6832:6832/udp"
+        - "5778:5778"
         - "16686:16686"
+        - "14268:14268"
+        - "14250:14250"
+
+  mysql:
+      image: mysql
+      hostname: "{{.Service.Name}}.{{.Task.Slot}}.{{.Task.ID}}"
+      command: --default-authentication-plugin=mysql_native_password
+      restart: always
+      deploy:
+        placement:
+          constraints: [node.role == manager]
+      networks:
+          - net
+      environment:
+        MYSQL_ROOT_PASSWORD: mysqlpass
+      volumes:
+          - mysqlvolume:/var/lib/mysql
+      ports:
+          - "3306:3306"
+  
+  # for mysql management
+  adminer:
+      image: adminer
+      hostname: "{{.Service.Name}}.{{.Task.Slot}}.{{.Task.ID}}"
+      restart: always
+      deploy:
+        placement:
+          constraints: [node.role == manager]
+      networks:
+          - net
+      ports:
+        - 8080:8080
+
+  # elasticsearch cluster with 2 node
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.7.2
+    environment:
+      - discovery.type=single-node
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300
+    networks:
+      - net
+
+volumes:
+  mysqlvolume:
+  esdata:
 
 networks:
     net:
