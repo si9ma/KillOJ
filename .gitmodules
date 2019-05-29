@@ -1,3 +1,9 @@
 [submodule "docker-library"]
 	path = docker-library
 	url = git@github.com:si9ma/docker-library.git
+[submodule "KillOJ-backend"]
+	path = KillOJ-backend
+	url = git@github.com:si9ma/KillOJ-backend.git
+[submodule "KillOJ-frontend"]
+	path = KillOJ-frontend
+	url = git@github.com:si9ma/KillOJ-frontend.git
