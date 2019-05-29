@@ -7,3 +7,6 @@
 [submodule "KillOJ-frontend"]
 	path = KillOJ-frontend
 	url = git@github.com:si9ma/KillOJ-frontend.git
+[submodule "KillOJ-judger"]
+	path = KillOJ-judger
+	url = git@github.com:si9ma/KillOJ-judger.git
