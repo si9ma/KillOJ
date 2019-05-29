@@ -3,7 +3,7 @@
 # Edit at https://www.gitignore.io/?templates=go,macos,jetbrains+all
 #
 
-./docker-compose.yml
+docker-compose.yml
 
 ### Go ###
 # Binaries for programs and plugins
