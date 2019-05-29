@@ -1,6 +1,9 @@
 
 # Created by https://www.gitignore.io/api/go,macos,jetbrains+all
 # Edit at https://www.gitignore.io/?templates=go,macos,jetbrains+all
+#
+
+./docker-compose.yml
 
 ### Go ###
 # Binaries for programs and plugins
