@@ -25,8 +25,7 @@ services:
       - RABBITMQ_DEFAULT_USER=user
       - RABBITMQ_DEFAULT_PASS=password
     ports:
-      - "5672:5672"   # amqp
-      - "15672:15672" # web ui
+      - "8000:15672" # web ui
 
   redis:
       image: si9ma/redis:5.0.4-alpine
@@ -48,8 +47,6 @@ services:
           delay: 10s
         restart_policy:
           condition: on-failure
-      ports:
-        - "6379:6379"
 
   jaeger:
       image: jaegertracing/all-in-one:1.11
@@ -64,13 +61,13 @@ services:
         placement:
           constraints: [node.role == manager]
       ports:
-        - "5775:5775/udp"
-        - "6831:6831/udp"
-        - "6832:6832/udp"
-        - "5778:5778"
-        - "16686:16686"
-        - "14268:14268"
-        - "14250:14250"
+        # - "5775:5775/udp"
+        # - "6831:6831/udp"
+        # - "6832:6832/udp"
+        # - "5778:5778"
+        # - "14268:14268"
+        # - "14250:14250"
+        - "8001:16686"
 
   mysql:
       image: mysql
@@ -86,8 +83,6 @@ services:
         MYSQL_ROOT_PASSWORD: password
       volumes:
           - mysqlvolume:/var/lib/mysql
-      ports:
-          - "3306:3306"
   
   # for mysql management
   adminer:
@@ -100,7 +95,7 @@ services:
       networks:
           - net
       ports:
-        - 8080:8080
+        - 8002:8080
 
   # # elasticsearch cluster with 2 node
   # elasticsearch:
@@ -133,7 +128,7 @@ services:
         restart_policy:
           condition: on-failure
       ports:
-        - "9999:80"
+        - "8003:80"
 
   backend:
       image: si9ma/killoj-backend
@@ -154,11 +149,11 @@ services:
         restart_policy:
           condition: on-failure
       ports:
-        - "8886:8080"
+        - "8004:8080"
 
 volumes:
   mysqlvolume:
-  esdata:
+  # esdata:
 
 networks:
     net:
