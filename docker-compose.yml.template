@@ -142,6 +142,7 @@ services:
         - GITHUB_SECRET=SECTET
         - GITHUB_KEY=KEY
         - KILLOJ_LANG=zh
+        - KILLOJ_3RD_AUTH_CALLBACK_URL=http://127.0.0.1/auth3rd
       networks:
           - net
       deploy:
